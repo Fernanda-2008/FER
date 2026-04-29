@@ -1,1 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Para Yandel</title>
+
+<style>
+body{
+  margin:0;
+  font-family:'Segoe UI';
+  overflow:hidden;
+  background:black;
+  color:white;
+}
+
+/* pantallas */
+.pantalla{
+  position:absolute;
+  width:100%;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+  padding:20px;
+  transition:1s;
+}
+
+.oculto{
+  opacity:0;
+  pointer-events:none;
+}
+
+/* fondo azul */
+.azul{
+  background: radial-gradient(circle,#87CEEB,#4A90E2);
+}
+
+/* tarjeta */
+.card{
+  background:#ffffff20;
+  padding:25px;
+  border-radius:30px;
+  backdrop-filter:blur(10px);
+  max-width:320px;
+}
+
+/* botones */
+.boton{
+  background:#ffb6c1;
+  border:none;
+  padding:12px 20px;
+  border-radius:30px;
+  margin-top:10px;
+  color:white;
+  cursor:pointer;
+}
+
+/* corazones */
+.corazon{
+  position:fixed;
+  font-size:18px;
+  color:#ffb6c1;
+}
+
+/* carretera */
+#carretera{
+  width:85%;
+  height:260px;
+  background:#111;
+  border-radius:20px;
+  position:relative;
+  overflow:hidden;
+}
+
+#moto{
+  position:absolute;
+  bottom:10px;
+  left:40%;
+  font-size:30px;
+}
+
+/* objetos */
+.objeto{
+  position:absolute;
+  top:0;
+  font-size:20px;
+}
+
+/* botones mover */
+.controles button{
+  margin:5px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 1 -->
+<div id="p1" class="pantalla">
+  <div class="card">
+    <h2>Ayuda a Fer con su proyecto</h2>
+    <input id="nombre" placeholder="Nombre"><br>
+    <input placeholder="Edad"><br>
+    <button class="boton" onclick="continuar()">Continuar</button>
+  </div>
+</div>
+
+<!-- 2 -->
+<div id="p2" class="pantalla oculto">
+  <h2 id="saludo"></h2>
+  <p>No era una tarea...</p>
+  <p>solo quería hacer algo para ti.</p>
+  <button class="boton" onclick="siguiente(3)">Continuar</button>
+</div>
+
+<!-- 3 -->
+<div id="p3" class="pantalla oculto azul">
+  <div class="card">
+    <p>En poco tiempo te volviste alguien importante.</p>
+    <button class="boton" onclick="siguiente(4)">Seguir</button>
+  </div>
+</div>
+
+<!-- 4 -->
+<div id="p4" class="pantalla oculto azul">
+  <div class="card">
+    <p>No estaba buscando a nadie...</p>
+    <p>y aun así apareciste tú.</p>
+    <button class="boton" onclick="siguiente(5)">Continuar</button>
+  </div>
+</div>
+
+<!-- 5 -->
+<div id="p5" class="pantalla oculto azul">
+  <div class="card">
+    <p>La distancia no cambia lo que siento.</p>
+    <button class="boton" onclick="siguiente(6)">Seguir</button>
+  </div>
+</div>
+
+<!-- 6 MUSICA -->
+<div id="p6" class="pantalla oculto azul">
+  <div class="card">
+    <p>Esto es para ti.</p>
+    <button class="boton" onclick="musica()">Escuchar</button>
+
+    <audio id="audio">
+      <source src="cancion.mp3" type="audio/mpeg">
+    </audio>
+
+    <button class="boton" onclick="iniciarJuego()">Ir al juego</button>
+  </div>
+</div>
+
+<!-- 7 JUEGO -->
+<div id="p7" class="pantalla oculto azul">
+  <h2>Avanza hacia mí</h2>
+
+  <div id="carretera">
+    <div id="moto">🏍</div>
+  </div>
+
+  <div class="controles">
+    <button onclick="moverIzq()">⬅</button>
+    <button onclick="moverDer()">➡</button>
+  </div>
+
+  <p id="mensajeJuego"></p>
+
+  <button class="boton" onclick="siguiente(8)">Continuar</button>
+</div>
+
+<!-- 8 CANDADO -->
+<div id="p8" class="pantalla oculto azul">
+  <div class="card">
+    <p>Hay algo más...</p>
+    <input id="clave" placeholder="Clave">
+    <button class="boton" onclick="verificar()">Abrir</button>
+  </div>
+</div>
+
+<!-- 9 POEMA -->
+<div id="p9" class="pantalla oculto azul">
+  <div class="card">
+    <p>No importa la distancia,</p>
+    <p>porque sigues aquí.</p>
+    <p>Hay personas que se sienten,</p>
+    <p>incluso sin estar.</p>
+    <button class="boton" onclick="siguiente(10)">Final</button>
+  </div>
+</div>
+
+<!-- 10 FINAL -->
+<div id="p10" class="pantalla oculto azul">
+  <p>Me gustas.</p>
+  <p>Y quiero seguir contigo.</p>
+  <h2>Para Yandel Hernández Hernández</h2>
+</div>
+
+<script>
+
+/* pantallas */
+function siguiente(n){
+  document.querySelectorAll(".pantalla").forEach(p=>p.classList.add("oculto"));
+  document.getElementById("p"+n).classList.remove("oculto");
+}
+
+/* inicio */
+function continuar(){
+  let nombre=document.getElementById("nombre").value;
+  document.getElementById("saludo").innerHTML="Esto es para ti, "+nombre;
+
+  explosion();
+  lluvia();
+  siguiente(2);
+}
+
+/* corazones */
+function explosion(){
+  for(let i=0;i<80;i++){
+    let c=document.createElement("div");
+    c.innerHTML="💗";
+    c.classList.add("corazon");
+
+    c.style.left="50%";
+    c.style.top="50%";
+
+    let x=(Math.random()-0.5)*700;
+    let y=(Math.random()-0.5)*700;
+
+    c.animate([
+      {transform:"translate(0,0)"},
+      {transform:`translate(${x}px,${y}px)`}
+    ],{duration:1000});
+
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),1000);
+  }
+}
+
+function lluvia(){
+  setInterval(()=>{
+    let c=document.createElement("div");
+    c.innerHTML="💗";
+    c.classList.add("corazon");
+
+    c.style.left=Math.random()*100+"vw";
+    c.style.top="-10px";
+
+    document.body.appendChild(c);
+
+    let caer=setInterval(()=>{
+      c.style.top=c.offsetTop+4+"px";
+      if(c.offsetTop>window.innerHeight){
+        c.remove();
+        clearInterval(caer);
+      }
+    },30);
+
+  },300);
+}
+
+/* musica */
+function musica(){
+  document.getElementById("audio").play();
+}
+
+/* mover moto (celular) */
+function moverIzq(){
+  let moto=document.getElementById("moto");
+  moto.style.left=(moto.offsetLeft-40)+"px";
+}
+
+function moverDer(){
+  let moto=document.getElementById("moto");
+  moto.style.left=(moto.offsetLeft+40)+"px";
+}
+
+/* juego */
+let mensajes=[
+"Me fui quedando...",
+"Me gustaste...",
+"Quiero seguir contigo...",
+"Voy hacia ti..."
+];
+let i=0;
+
+function iniciarJuego(){
+  siguiente(7);
+
+  setInterval(()=>{
+    let obj=document.createElement("div");
+    obj.classList.add("objeto");
+    obj.innerHTML="💗";
+
+    obj.style.left=Math.random()*80+"%";
+
+    document.getElementById("carretera").appendChild(obj);
+
+    let caer=setInterval(()=>{
+      obj.style.top=obj.offsetTop+5+"px";
+
+      let moto=document.getElementById("moto");
+
+      if(Math.abs(obj.offsetLeft - moto.offsetLeft)<40){
+        document.getElementById("mensajeJuego").innerHTML=mensajes[i];
+        i++;
+        obj.remove();
+        clearInterval(caer);
+
+        if(i>=mensajes.length){
+          document.getElementById("mensajeJuego").innerHTML="Llegué a ti 💗";
+        }
+      }
+
+      if(obj.offsetTop>240){
+        obj.remove();
+        clearInterval(caer);
+      }
+
+    },30);
+
+  },1200);
+}
+
+/* clave */
+function verificar(){
+  if(document.getElementById("clave").value.toLowerCase()=="feria"){
+    siguiente(9);
+  }else{
+    alert("Intenta otra vez");
+  }
+}
+
+</script>
+
+</body>
+</html>
 
